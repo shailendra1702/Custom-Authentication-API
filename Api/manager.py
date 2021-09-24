@@ -7,7 +7,8 @@ class UserManager(BaseUserManager):
         
         if not email:
             raise ValueError('Email is required')
-        
+        if mobile is None:
+            raise ValueError('Mobile number is required')
         email = self.normalize_email(email)
         
         user = self.model(email = email, mobile= mobile, **extra_fields)

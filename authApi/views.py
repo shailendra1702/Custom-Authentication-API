@@ -6,6 +6,9 @@ from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import status
 from rest_framework.permissions import AllowAny
+from django.contrib.sites.shortcuts import get_current_site
+from authApi.utils import Util
+from django.urls import reverse
 
 
 class LoginViewSet(ModelViewSet, TokenObtainPairView):
@@ -34,11 +37,20 @@ class RegistrationViewSet(ModelViewSet, TokenObtainPairView):
 
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
+        
         refresh = RefreshToken.for_user(user)
         res = {
             "refresh": str(refresh),
             "access": str(refresh.access_token),
         }
+        
+        current_site = get_current_site(request).domain
+        relativeLink = reverse('email-verify')
+        absurl = f'http://{current_site}{relativeLink}?token={refresh.access_token}'
+        email_body = f'Hi, Use the link below to verify your email:\n {absurl}'
+        data = {'email_body':email_body, 'to_email':user.email,'email_subject':'Verify your email'}
+        
+        Util.send_email(data)
 
         return Response({
             "user": serializer.data,
@@ -46,6 +58,11 @@ class RegistrationViewSet(ModelViewSet, TokenObtainPairView):
             "token": res["access"],
             "status": "201"
         })
+
+class VerifyEmail(ModelViewSet):
+    def retrieve(self,request):
+        pass
+        
 
 # class RegisterView(APIView):
 

@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'rest_framework',
     'rest_framework_simplejwt',
     # 'rest_framework.authtoken',
@@ -159,5 +160,5 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-# EMAIL_HOST_USER = 'EMAIL'
-# EMAIL_HOST_PASSWORD = 'PASSWORD'
+EMAIL_HOST_USER = 'kumarshailendra1702@gmail.com'
+EMAIL_HOST_PASSWORD = 'stromatadore!@#&%'

@@ -23,7 +23,18 @@ class RegisterSerializer(UserSerializer):
     class Meta:
         model = User
         fields = ['email','password','mobile','is_active','created']
+    
+    def validate(self,attrs):
+        email = attrs.get('email','')
+        mobile = attrs.get('mobile','')
         
+        if email.find('@') == -1:
+            raise serializers.ValidationError('Email should contain @ in it') 
+
+        if mobile.isdigit() and len(mobile) == 10:
+            raise serializers.ValidationError('Invalid phone number must contain 10 digits and should numeric digit [0-9]') 
+        
+                
     def create(self, validated_data):
         user = User.objects.create_user(**validated_data)
         # user.save()
