@@ -5,17 +5,18 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.filters import OrderingFilter
 
+
 class UserViewSet(viewsets.ModelViewSet):
     http_method_names = ['get']
     serializer_class = UserSerializer
     permission_classes = (IsAuthenticated,)
     filter_backends = [OrderingFilter]
-    ordering_fields = ['-updated']
-    
+    ordering_fields = ['-created']
+
     def get_queryset(self):
-        if self.request.user.is_superuser:
+        if self.request.user:
             return User.objects.all()
-    
+
     def get_object(self):
         lookup_field_value = self.kwargs[self.lookup_field]
         obj = User.objects.get(lookup_field_value)

@@ -10,7 +10,6 @@ from django.conf import settings
 
 
 class User(AbstractUser):
-
     username = None
     email = models.CharField(max_length=128, unique=True,db_index=True)
     mobile = models.CharField(max_length=14,db_index=True)
@@ -24,7 +23,7 @@ class User(AbstractUser):
     is_staff = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['mobile']
+    REQUIRED_FIELDS = ['mobile',]
 
     objects = UserManager()
 

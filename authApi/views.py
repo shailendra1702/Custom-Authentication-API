@@ -37,19 +37,19 @@ class RegistrationViewSet(ModelViewSet, TokenObtainPairView):
 
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
-        
         refresh = RefreshToken.for_user(user)
         res = {
             "refresh": str(refresh),
             "access": str(refresh.access_token),
         }
-        
+
         current_site = get_current_site(request).domain
-        relativeLink = reverse('email-verify')
+        relativeLink = reverse('email-verify-list')
         absurl = f'http://{current_site}{relativeLink}?token={refresh.access_token}'
         email_body = f'Hi, Use the link below to verify your email:\n {absurl}'
-        data = {'email_body':email_body, 'to_email':user.email,'email_subject':'Verify your email'}
-        
+        data = {'email_body': email_body, 'to_email': user.email,
+                'email_subject': 'Verify your email'}
+
         Util.send_email(data)
 
         return Response({
@@ -58,11 +58,15 @@ class RegistrationViewSet(ModelViewSet, TokenObtainPairView):
             "token": res["access"],
             "status": "201"
         })
+        # except Exception as e:
+        #     # print(e.__traceback__)
+        #     return Response({'msg': e, 'status': 400})
+
 
 class VerifyEmail(ModelViewSet):
-    def retrieve(self,request):
+    def retrieve(self, request):
         pass
-        
+
 
 # class RegisterView(APIView):
 
